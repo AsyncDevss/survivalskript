@@ -1,0 +1,85 @@
+command /tpa [<player>]:
+    trigger:
+        set {tpa::%arg-1%} to player
+        send "&e%player% sana ışınlanmak istiyor, /tpkabul yaz." to arg-1
+command /tpkabul:
+    trigger:
+        teleport {tpa::%player%} to player
+        delete {tpa::%player%}
+
+command /sethome:
+    trigger:
+        set {home::%player%} to location of player
+command /home:
+    trigger:
+        teleport player to {home::%player%}
+
+# Kit
+command /kit:
+    trigger:
+        give iron sword, iron chestplate and 16 golden apple to player
+
+command /çöp:
+    trigger:
+        open chest with 3 rows named "&cÇöp" to player
+command /repair:
+    trigger:
+        repair player's tool
+command /enderchest:
+    trigger:
+        open enderchest of player to player
+
+on death of player:
+    drop player's skull at victim
+    play sound "entity.wither.spawn" at victim
+
+on break of log:
+    if player is sneaking:
+        loop blocks above event-block:
+            if loop-block is log:
+                break loop-block
+
+on break of spawner:
+    if player's tool is diamond pickaxe with silk touch:
+        drop 1 spawner at event-block
+
+on fish:
+    if chance of 10%:
+        give 1 diamond to player
+
+# Ekonomi & PvP
+command /sat:
+    trigger:
+        remove all coal from player's inventory
+        add 500 to player's balance
+        send "&aHam maddeler satıldı."
+
+command /pvp:
+    trigger:
+        toggle {pvp::%player%}
+        send "PvP: %{pvp::%player%}%"
+
+every 10 minutes:
+    clear dropped items
+    broadcast "&eYerdeki eşyalar temizlendi."
+
+on rightclick with torch:
+    apply night vision to player for 10 seconds
+
+command /sun:
+    trigger:
+        execute console command "/weather clear"
+
+command /zırhstandı:
+    trigger:
+        spawn armor stand at player
+        send "Zırh standı oluşturuldu."
+
+on death of player:
+    add 1 to {puan::%attacker%}
+
+every 1 seconds:
+    loop all players:
+        if player has 9 iron ingot:
+            remove 9 iron ingot from player
+            give 1 iron block to player
